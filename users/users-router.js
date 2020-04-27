@@ -18,3 +18,5 @@ router.get("/:userId", (req, res) => {
             res.status(200).json(user)
         })
 })
+
+module.exports = router;
