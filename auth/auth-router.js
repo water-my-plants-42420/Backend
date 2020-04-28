@@ -3,7 +3,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 const Users = require('../users/users-model');
-const secrets = require('../api/secrets');
+const { jwtSecret } = require('../api/secrets.js');
 
 router.post('/register', (req, res) => {
 	let user = req.body;
@@ -25,42 +25,28 @@ router.post('/register', (req, res) => {
 
 router.post('/login', (req, res) => {
 	let { username, password } = req.body;
-	Users.findBy({ username })
-		.then(([user]) => {
+	Users.findBy({
+		username,
+	})
+		.first()
+		.then((user) => {
+			const token = generateToken(user);
 			user && bcrypt.compareSync(password, user.password)
-				? res.status(200).json({ message: 'You are logged in!' })
-				: res.status(401).json({ message: 'Please try logging in, first!' });
+				? res.status(200).json({
+						message: 'You are logged in!',
+						token,
+				  })
+				: res.status(401).json({
+						message: 'Please try logging in, first!',
+				  });
 		})
-		.catch((error) => {
-			console.log(error);
-			res.status(500).json({ errorMessage: error.message });
+		.catch((err) => {
+			console.log(err);
+			res.status(500).json({
+				errorMessage: 'There was an error loggin in!',
+			});
 		});
 });
-
-// router.post('/login', (req, res) => {
-// 	let { username, password } = req.body;
-// 	Users.findBy({
-// 		username,
-// 	})
-// 		.first()
-// 		.then((user) => {
-// 			const token = generateToken(user);
-// 			user && bcrypt.compareSync(password, user.password)
-// 				? res.status(200).json({
-// 						message: 'You are logged in!',
-// 						token,
-// 				  })
-// 				: res.status(401).json({
-// 						message: 'Please try logging in, first!',
-// 				  });
-// 		})
-// 		.catch((err) => {
-// 			console.log(err);
-// 			res.status(500).json({
-// 				errorMessage: 'There was an error loggin in!',
-// 			});
-// 		});
-// });
 
 function generateToken(user) {
 	const payload = {
@@ -70,7 +56,7 @@ function generateToken(user) {
 	const options = {
 		expiresIn: '2hr',
 	};
-	return jwt.sign(payload, secrets, options);
+	return jwt.sign(payload, jwtSecret, options);
 }
 
 module.exports = router;
