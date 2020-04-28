@@ -25,27 +25,42 @@ router.post('/register', (req, res) => {
 
 router.post('/login', (req, res) => {
 	let { username, password } = req.body;
-	Users.findBy({
-		username,
-	})
-		.first()
-		.then((user) => {
-			const token = generateToken(user);
+	Users.findBy({ username })
+		.then(([user]) => {
 			user && bcrypt.compareSync(password, user.password)
-				? res.status(200).json({
-						message: 'You are logged in!',
-						token,
-				  })
-				: res.status(401).json({
-						message: 'Please try logging in, first!',
-				  });
+				? res.status(200).json({ message: 'You are logged in!' })
+				: res.status(401).json({ message: 'Please try logging in, first!' });
 		})
-		.catch(() => {
-			res.status(500).json({
-				errorMessage: 'There was an error loggin in!',
-			});
+		.catch((error) => {
+			console.log(error);
+			res.status(500).json({ errorMessage: error.message });
 		});
 });
+
+// router.post('/login', (req, res) => {
+// 	let { username, password } = req.body;
+// 	Users.findBy({
+// 		username,
+// 	})
+// 		.first()
+// 		.then((user) => {
+// 			const token = generateToken(user);
+// 			user && bcrypt.compareSync(password, user.password)
+// 				? res.status(200).json({
+// 						message: 'You are logged in!',
+// 						token,
+// 				  })
+// 				: res.status(401).json({
+// 						message: 'Please try logging in, first!',
+// 				  });
+// 		})
+// 		.catch((err) => {
+// 			console.log(err);
+// 			res.status(500).json({
+// 				errorMessage: 'There was an error loggin in!',
+// 			});
+// 		});
+// });
 
 function generateToken(user) {
 	const payload = {
