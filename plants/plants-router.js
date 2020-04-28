@@ -2,23 +2,66 @@ const router = require('express').Router();
 const Plants = require('./plants-model.js');
 
 router.get('/', (req, res) => {
-	Plants.find()
-		.then((plants) => {
-			res.status(200).json(plants);
-		})
-		.catch(() => {
-			res.status(500).json({ message: 'Failed to get plants.' });
-		});
+    Plants.find()
+        .then((plants) => {
+            res.status(200).json(plants);
+        })
+        .catch(() => {
+            res.status(500).json({
+                message: 'Failed to get plants.'
+            });
+        });
 });
 
 router.get('/:id', (req, res) => {
-	const { id } = req.params;
-	Plants.findById(id)
-		.then((plant) => {
-			res.status(200).json(plant);
-			res.status(404).json({ message: `Could not find plant with ID: ${id}.` });
-		})
-		.catch(() => {
-			res.status(500).json({ message: 'Failed to get plant.' });
-		});
+    const {
+        id
+    } = req.params;
+    Plants.findById(id)
+        .then((plant) => {
+            res.status(200).json(plant);
+            res.status(404).json({
+                message: `Could not find plant with ID: ${id}.`
+            });
+        })
+        .catch(() => {
+            res.status(500).json({
+                message: 'Failed to get plant.'
+            });
+        });
 });
+
+router.put("/:id", (req, res) => {
+    const {
+        user_id,
+        id
+    } = req.params
+    const changes = req.body
+
+    Plants.findById(id)
+        .then(plant => {
+            if (plant) {
+                Plants.update(id, changes)
+                    .then(updated => {
+                        res.status(200).json({
+                            message: "successfully updated"
+                        })
+                    })
+                    .catch(err => {
+                        console.log(err)
+                        res.status(500).json({
+                            errorMessage: error.message
+                        })
+                    })
+            } else {
+                res.status(404).json({
+                    errorMessage: "plant not found"
+                })
+            }
+        })
+        .catch(err => {
+            console.log(err)
+            res.status(500).json({
+                errorMessage: error.message})
+        })
+})

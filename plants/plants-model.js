@@ -25,3 +25,11 @@ function findById(id) {
         id
     }).first();
 }
+
+function update(id, changes) {
+    return db('plants').where({id}).update(changes);
+}
+
+function remove(id) {
+    return db('plants').where('id', id).del();
+}
