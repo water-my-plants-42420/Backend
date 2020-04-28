@@ -31,6 +31,18 @@ router.get('/:id', (req, res) => {
         });
 });
 
+router.post('/', (req, res) => {
+	const { id } = req.params;
+	const newPlant = req.body;
+	Plants.add(id, newPlant)
+		.then((plant) => {
+			res.status(201).json({ created: plant });
+		})
+		.catch(() => {
+			res.status(500).json({ errorMessage: 'Failed to post new plant', err });
+		});
+});
+
 router.put("/:id", (req, res) => {
     const {
         user_id,
@@ -65,3 +77,17 @@ router.put("/:id", (req, res) => {
                 errorMessage: error.message})
         })
 })
+
+
+router.delete('/:id', (req, res) => {
+	const { id } = req.params;
+	Plants.remove(id)
+		.then((deleted) => {
+			res.status(200).json({ removed: deleted });
+		})
+		.catch(() => {
+			res
+				.status(500)
+				.json({ errorMessage: `cannot remove plant by ID: ${id}` });
+		});
+});
