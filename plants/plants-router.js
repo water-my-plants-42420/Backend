@@ -22,3 +22,28 @@ router.get('/:id', (req, res) => {
 			res.status(500).json({ message: 'Failed to get plant.' });
 		});
 });
+
+router.post('/', (req, res) => {
+	const { id } = req.params;
+	const newPlant = req.body;
+	Plants.add(id, newPlant)
+		.then((plant) => {
+			res.status(201).json({ created: plant });
+		})
+		.catch(() => {
+			res.status(500).json({ errorMessage: 'Failed to post new plant', err });
+		});
+});
+
+router.delete('/:id', (req, res) => {
+	const { id } = req.params;
+	Plants.remove(id)
+		.then((deleted) => {
+			res.status(200).json({ removed: deleted });
+		})
+		.catch(() => {
+			res
+				.status(500)
+				.json({ errorMessage: `cannot remove plant by ID: ${id}` });
+		});
+});
