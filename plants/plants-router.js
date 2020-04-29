@@ -61,9 +61,9 @@ router.put('/:id', (req, res) => {
 			if (plant) {
 				Plants.update(id, changes)
 					.then((updated) => {
-						res.status(200).json({
-							message: 'successfully updated',
-						});
+						res
+							.status(200)
+							.json({ message: `successfully updated plant ID: ${id}` });
 					})
 					.catch((err) => {
 						console.log(err);
@@ -89,7 +89,7 @@ router.delete('/:id', (req, res) => {
 	const { id } = req.params;
 	Plants.remove({ id })
 		.then((deleted) => {
-			res.status(200).json({deleted});
+			res.status(200).json({ message: `plant ID: ${id} has been`, deleted });
 		})
 		.catch((err) => {
 			console.log(err);
