@@ -32,7 +32,7 @@ router.get('/:id', (req, res) => {
 router.post('/', (req, res) => {
 	const { id } = req.params;
 	const newPlant = req.body;
-	Plants.add(id, newPlant)
+	Plants.add(newPlant, id)
 		.then((plant) => {
 			res.status(201).json({ created: plant });
 		})
