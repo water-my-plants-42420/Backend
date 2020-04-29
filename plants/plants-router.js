@@ -87,12 +87,12 @@ router.put('/:id', (req, res) => {
 
 router.delete('/:id', (req, res) => {
 	const { id } = req.params;
-	Plants.remove({id})
+	Plants.remove({ id })
 		.then((deleted) => {
-			res.status(200).json({response: `plant ID: ${id}`, deleted});
+			res.status(200).json({ deleted: `plant ID: ${id}`, deleted });
 		})
 		.catch((err) => {
-			console.log(err)
+			console.log(err);
 			res
 				.status(500)
 				.json({ errorMessage: `cannot remove plant by ID: ${id}` });
