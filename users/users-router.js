@@ -17,28 +17,27 @@ router.get('/user/:id', (req, res) => {
 	});
 });
 
-router.put("/:id", (req, res) => {
+router.put('/:id', (req, res) => {
 	const { id } = req.params;
-	const users = req.body
+	const users = req.body;
 	Users.update(id, users)
-	.then(user => {
-		res.status(200).json(user);
-	})
-	.catch(err => {
-		console.log(err);
-		res.status(500).json({message: err.message})
-	})
-})
+		.then((user) => {
+			res.status(200).json(user);
+		})
+		.catch((err) => {
+			console.log(err);
+			res.status(500).json({ message: err.message });
+		});
+});
 
 router.delete('/:id', (req, res) => {
 	const { id } = req.params;
-	Users.remove({id})
-	.then(res.status(200).json({message: 'user deleted'}))
-	.catch(err => {
-		console.log(err);
-		res.status(500).json({ message: err.message})
-	})
-})
-
+	Users.remove({ id })
+		.then(res.status(200).json({ message: 'user deleted' }))
+		.catch((err) => {
+			console.log(err);
+			res.status(500).json({ message: err.message });
+		});
+});
 
 module.exports = router;
