@@ -3,7 +3,9 @@ module.exports = {
     add,
     find,
     findByUser,
-    findById
+    findById,
+    update,
+    remove
 };
 
 function find() {

@@ -54,9 +54,8 @@ router.post('/', (req, res) => {
 });
 
 router.put('/:id', (req, res) => {
-	const { user_id, id } = req.params;
+	const { id } = req.params;
 	const changes = req.body;
-
 	Plants.findById(id)
 		.then((plant) => {
 			if (plant) {
@@ -88,9 +87,9 @@ router.put('/:id', (req, res) => {
 
 router.delete('/:id', (req, res) => {
 	const { id } = req.params;
-	Plants.remove(id)
+	Plants.remove({id})
 		.then((deleted) => {
-			res.status(200).json({ removed: deleted });
+			res.status(200).json({response: `plant ID: ${id}`, deleted});
 		})
 		.catch((err) => {
 			console.log(err)
