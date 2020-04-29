@@ -35,6 +35,7 @@ router.post('/login', (req, res) => {
 				? res.status(200).json({
 						message: 'You are logged in!',
 						token,
+						user
 				  })
 				: res.status(401).json({
 						message: 'Please try logging in, first!',
@@ -54,7 +55,7 @@ function generateToken(user) {
 		username: user.username,
 	};
 	const options = {
-		expiresIn: '2hr',
+		expiresIn: '24hr',
 	};
 	return jwt.sign(payload, jwtSecret, options);
 }

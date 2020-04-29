@@ -13,6 +13,18 @@ router.get('/', (req, res) => {
 		});
 });
 
+router.get('/user/:id', (req, res) => {
+	const { id } = req.params;
+	Plants.findByUser(id)
+		.then((plants) => {
+			res.status(200).json(plants);
+		})
+		.catch((err) => {
+			console.log(err);
+			res.status(500).json({ message: err.message });
+		});
+});
+
 router.get('/:id', (req, res) => {
 	const { id } = req.params;
 	Plants.findById(id)
