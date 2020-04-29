@@ -89,7 +89,7 @@ router.delete('/:id', (req, res) => {
 	const { id } = req.params;
 	Plants.remove({ id })
 		.then((deleted) => {
-			res.status(200).json({ deleted: `plant ID: ${id}`, deleted });
+			res.status(200).json({deleted});
 		})
 		.catch((err) => {
 			console.log(err);
