@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const Users = require('./users-model.js');
+const Auth = require('../auth/authenticate-middleware.js');
 
 router.get('/', (req, res) => {
 	console.log('token', req.decodedToken);
@@ -10,19 +11,20 @@ router.get('/', (req, res) => {
 		.catch((err) => res.send(err));
 });
 
-router.get('/user/:id', (req, res) => {
+router.get('/:id', (req, res) => {
 	const { id } = req.params;
 	Users.findById(id).then((user) => {
 		res.status(200).json(user);
 	});
 });
 
-router.put('/:id', (req, res) => {
+router.put('/:id', Auth, (req, res) => {
 	const { id } = req.params;
-	const users = req.body;
-	Users.update(id, users)
+	const changes = req.body;
+	Users.findById(id)
 		.then((user) => {
-			res.status(200).json(user);
+			user ? Users.update(changes, id) : res.status(200).json(updateUser);
+			delete updateUser.password;
 		})
 		.catch((err) => {
 			console.log(err);
@@ -30,7 +32,7 @@ router.put('/:id', (req, res) => {
 		});
 });
 
-router.delete('/:id', (req, res) => {
+router.delete('/:id', Auth, (req, res) => {
 	const { id } = req.params;
 	Users.remove({ id })
 		.then(res.status(200).json({ message: 'user deleted' }))
