@@ -22,11 +22,9 @@ router.put('/:id', Auth, (req, res) => {
 	const { id } = req.params;
 	const changes = req.body;
 	Users.findById(id)
-	.then((user) => {
-		user ? 
-			Users.update(changes, id)
-			(delete updateUser.password)
-			: res.status(200).json(updateUser)
+		.then((user) => {
+			user ? Users.update(changes, id) : res.status(200).json(updateUser);
+			delete updateUser.password;
 		})
 		.catch((err) => {
 			console.log(err);
