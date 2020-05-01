@@ -1,4 +1,5 @@
 const router = require('express').Router();
+const bcrypt = require('bcryptjs');
 const Users = require('./users-model.js');
 const Auth = require('../auth/authenticate-middleware.js');
 
@@ -19,13 +20,23 @@ router.get('/:id', (req, res) => {
 });
 
 router.put('/:id', Auth, (req, res) => {
+	let user = req.body
 	const { id } = req.params;
 	const changes = req.body;
+	const rounds = process.env.HASH_ROUNDS || 8;
+	const hash = bcrypt.hashSync(user.password, rounds);
+
+	user.password = hash;
 	Users.findById(id)
 		.then((user) => {
 			if (user) {
 				Users.update(id, changes).then((updateUser) => {
-					res.status(200).json({ message: `successfully updated user ID: ${id}`, updateUser });
+					res
+						.status(200)
+						.json({
+							message: `successfully updated user ID: ${id}`,
+							updateUser,
+						});
 				});
 			} else {
 				res.status(404).json({ message: 'no user found' });
