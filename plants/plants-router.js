@@ -48,8 +48,8 @@ router.post('/', (req, res) => {
 		.then((plant) => {
 			res.status(201).json({ created: plant });
 		})
-		.catch(() => {
-			res.status(500).json({ errorMessage: 'Failed to post new plant', err });
+		.catch((err) => {
+			res.status(500).json({ message: err.message });
 		});
 });
 
