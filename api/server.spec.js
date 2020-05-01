@@ -58,16 +58,6 @@ describe('server', function () {
 		})
 	})
 
-	describe('GET /plants/:id', function () {
-		it('should return 200 on success', function () {
-			return request(server)
-			.get('/api/plants/4')
-			.set('Authorization', loggedInToken)
-			.then(res => {
-				expect(res.status).toBe(200);
-			})
-		})
-	})
 	describe('POST /plants/',function () {
 		it('should return 201 on success', function () {
 			return request(server)
