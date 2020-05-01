@@ -25,8 +25,8 @@ router.put('/:id', Auth, (req, res) => {
 	.then((user) => {
 		user ? 
 			Users.update(changes, id)
-			: res.status(200).json(user)
-			delete user.password
+			(delete updateUser.password)
+			: res.status(200).json(updateUser)
 		})
 		.catch((err) => {
 			console.log(err);
