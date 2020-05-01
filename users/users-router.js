@@ -23,8 +23,12 @@ router.put('/:id', Auth, (req, res) => {
 	const changes = req.body;
 	Users.findById(id)
 		.then((user) => {
-			user ? Users.update(changes, id) : res.status(200).json(updateUser);
-			delete updateUser.password;
+			user
+				? Users.update(changes, id).then((updateUser) => {
+						delete updateUser.password;
+						res.status(200).json(updateUser);
+				  })
+				: res.status(404).json({ message: 'no user found' });
 		})
 		.catch((err) => {
 			console.log(err);
