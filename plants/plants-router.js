@@ -58,24 +58,15 @@ router.put('/:id', (req, res) => {
 	const changes = req.body;
 	Plants.findById(id)
 		.then((plant) => {
-			if (plant) {
-				Plants.update(id, changes)
-					.then((updated) => {
-						res
-							.status(200)
-							.json({ message: `successfully updated plant ID: ${id}` });
-					})
-					.catch((err) => {
-						console.log(err);
-						res.status(500).json({
-							errorMessage: error.message,
+			plant
+				? Plants.update(id, changes).then((updated) => {
+						res.status(200).json({
+							message: `successfully updated plant ID: ${id}`,
 						});
-					});
-			} else {
-				res.status(404).json({
-					errorMessage: 'plant not found',
-				});
-			}
+				  })
+				: res.status(404).json({
+						errorMessage: 'plant not found',
+				  });
 		})
 		.catch((err) => {
 			console.log(err);
