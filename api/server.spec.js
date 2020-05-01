@@ -3,6 +3,7 @@ const request = require('supertest');
 const server = require('./server');
 const db = require('../dbConfig.js');
 var loggedInToken = '';
+
 describe('server', function () {
 	describe('POST /register', function () {
 
